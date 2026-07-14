@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>상품 조회</title>
+	<link rel="stylesheet" href="/css/products.css">
+</head>
+<body>
+
+<h1>상품 조회</h1>
+
+시작일 <input type="date" id="startDate">
+종료일 <input type="date" id="endDate">
+<button onclick="search()">조회</button>
+
+<table border="1">
+	<thead>
+	<tr>
+		<th>상품명</th>
+		<th>가격</th>
+		<th>재고</th>
+		<th>등록일</th>
+	</tr>
+	</thead>
+	<tbody id="body">
+	<tr><td colspan="4">조회 결과 없음</td></tr>
+	</tbody>
+</table>
+
+<script>
+	function search() {
+		fetch('/api/products/search', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				startDate: document.getElementById('startDate').value,
+				endDate: document.getElementById('endDate').value
+			})
+		})
+			.then(res => res.json())
+			.then(data => {
+				const body = document.getElementById('body');
+				body.innerHTML = '';
+				data.forEach(p => {
+					body.innerHTML += `
+        <tr>
+          <td>${p.name}</td>
+          <td>${p.price}</td>
+          <td>${p.stock}</td>
+          <td>${p.createdAt}</td>
+        </tr>`;
+				});
+			});
+	}
+</script>
+
+</body>
+</html>

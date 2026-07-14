@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="wayble.ade.common.repository.ExhstQuoteRepository">
+<mapper namespace="com.example.demo.repository.ProductRepository">
+	
+	<select id="selectProductList"
+			parameterType="com.example.demo.dto.ProductDto"
+			resultType="com.example.demo.dto.ProductDto">
+    SELECT
+        name,
+        price,
+        stock,
+        DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS createdAt
+    FROM product
+    WHERE 1 = 1
+    ]]>
+		<if test="startDate != null and startDate != ''">
+			AND created_at >= CONCAT(#{startDate}, ' 00:00:00')
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND created_at <= CONCAT(#{endDate}, ' 23:59:59')
+		</if>
+		<![CDATA[
+    ORDER BY created_at DESC
+	</select>
+
+</mapper>
